@@ -14,6 +14,10 @@
         <h1>Rare Word Finder</h1>
         <button type="button" id="theme-toggle" aria-label="Toggle light or dark mode">Dark mode</button>
     </header>
+    <div class="app-description">
+        <p>Use this tool to sift through any text and surface words that appear less often in English. The rarest words in your input are highlighted so you can quickly spot vocabulary you might be unfamiliar with.</p>
+        <p><strong>Dictionary:</strong> Hover or click a highlighted word, or any word in the results table, to see its definition in a tooltip. If no definition is found, click “Search online” in the tooltip to look it up in a new tab.</p>
+    </div>
     <div id="load-status" class="loading">Loading word frequency data…</div>
     <div id="csv-file-input">
         <label>Or load CSV manually (if opening as file): <input type="file" id="csv-file" accept=".csv"></label>
@@ -28,17 +32,23 @@
     <p class="highlighted-heading">Rarest words highlighted below.</p>
     <div id="highlighted-text"></div>
     <div id="definition-tooltip" class="definition-tooltip" aria-hidden="true" role="tooltip"></div>
-    <table id="results-table">
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th id="word-col-header">Word</th>
-                <th>Frequency in English</th>
-                <th><a href="https://www.researchgate.net/figure/The-Zipf-scale-of-word-frequency_tbl1_259718817#:~:text=The%20Zipf%20value%20is%20calculated,et%20al.%2C%202014)%20." target="_blank" rel="noopener">Zipf Value</a></th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div class="table-wrapper">
+        <table id="results-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th id="word-col-header">Word</th>
+                    <th>Frequency in English</th>
+                    <th><a href="https://www.researchgate.net/figure/The-Zipf-scale-of-word-frequency_tbl1_259718817#:~:text=The%20Zipf%20value%20is%20calculated,et%20al.%2C%202014)%20." target="_blank" rel="noopener">Zipf Value</a></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="unknown-words-section" class="unknown-words-section" aria-label="Words not in database" style="display: none;">
+        <p class="unknown-words-heading">Words not in database</p>
+        <p id="unknown-words-list" class="unknown-words-list"></p>
+    </div>
     <div id="slider-container">
         <label for="num-words-slider" id="slider-label">Number of rare words to highlight: </label>
         <input type="range" id="num-words-slider" min="1" max="50" value="10">

@@ -81,6 +81,8 @@ function loadFromFile(file) {
     });
 }
 
+const FREQ_DATA_URL = 'https://www.kaggle.com/datasets/rtatman/english-word-frequency';
+
 function initApp() {
     const statusEl = document.getElementById('load-status');
     const textInput = document.getElementById('text-input');
@@ -88,7 +90,8 @@ function initApp() {
 
     loadFromURL('wordFrequencyData.csv')
         .then((count) => {
-            setStatus(statusEl, 'ready', `Word frequency data loaded (${count.toLocaleString()} words).`);
+            statusEl.className = 'ready';
+            statusEl.innerHTML = '<a href="' + FREQ_DATA_URL + '" target="_blank" rel="noopener">Word frequency data</a> loaded (' + count.toLocaleString() + ' words).';
             textInput.disabled = false;
             $('#text-input').trigger('input');
         })
@@ -103,7 +106,8 @@ function initApp() {
         setStatus(statusEl, 'loading', 'Loading…');
         loadFromFile(file)
             .then((count) => {
-                setStatus(statusEl, 'ready', `Word frequency data loaded (${count.toLocaleString()} words).`);
+                statusEl.className = 'ready';
+                statusEl.innerHTML = '<a href="' + FREQ_DATA_URL + '" target="_blank" rel="noopener">Word frequency data</a> loaded (' + count.toLocaleString() + ' words).';
                 textInput.disabled = false;
                 $('#text-input').trigger('input');
             })
@@ -188,12 +192,26 @@ $(document).ready(function () {
         const doc = nlp(text);
         const words = doc.text().split(/\s+/);
         const wordFreq = {};
+        const unknownWords = new Map();
+
+        function stripLeadingTrailingPunctuation(s) {
+            return s.replace(/^[^a-zA-Z']+|[^a-zA-Z']+$/g, '') || s;
+        }
 
         words.forEach(word => {
-            word = word.toLowerCase().replace(/[^a-z]/g, '');
-            if (word && wordFrequency[word] !== undefined) {
-                wordFreq[word] = wordFrequency[word];
-            }
+            const parts = word.split(/-/);
+            parts.forEach((part) => {
+                const normalized = part.toLowerCase().replace(/[^a-z]/g, '');
+                if (!normalized) return;
+                const displayForm = stripLeadingTrailingPunctuation(part);
+                if (wordFrequency[normalized] !== undefined) {
+                    wordFreq[normalized] = wordFrequency[normalized];
+                } else {
+                    if (!unknownWords.has(normalized)) {
+                        unknownWords.set(normalized, displayForm);
+                    }
+                }
+            });
         });
 
         const sortedFreq = Object.entries(wordFreq).sort((a, b) => a[1] - b[1]);
@@ -208,6 +226,7 @@ $(document).ready(function () {
 
         highlightText(text, rarestWords);
         displayTable(tableData);
+        displayUnknownWords(Array.from(unknownWords.values()).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })));
     }
 
     $('#text-input').on('input', processText);
@@ -367,5 +386,18 @@ $(document).ready(function () {
             });
             tableBody.append(tr);
         });
+    }
+
+    function displayUnknownWords(words) {
+        const section = document.getElementById('unknown-words-section');
+        const listEl = document.getElementById('unknown-words-list');
+        if (!section || !listEl) return;
+        if (words.length === 0) {
+            section.style.display = 'none';
+            listEl.textContent = '';
+            return;
+        }
+        section.style.display = 'block';
+        listEl.textContent = words.join(', ');
     }
 });

@@ -110,6 +110,26 @@ body {
     flex-wrap: wrap;
 }
 
+.app-description {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: 0 0 1.25rem;
+    max-width: 56rem;
+}
+
+.app-description p {
+    margin: 0 0 0.75rem;
+}
+
+.app-description p:last-child {
+    margin-bottom: 0;
+}
+
+.app-description strong {
+    color: var(--text);
+}
+
 h1 {
     font-size: 1.75rem;
     font-weight: 600;
@@ -330,7 +350,7 @@ h1 {
 .highlighted-heading {
     font-size: 0.9rem;
     color: var(--text-muted);
-    margin: 0 0 0.5rem;
+    margin: 0 0 1.25rem;
 }
 
 #highlighted-text {
@@ -343,7 +363,7 @@ h1 {
     font-size: 15px;
     line-height: 1.6;
     min-height: 8rem;
-    max-height: 80vh;
+    max-height: 90vh;
     overflow-y: auto;
     resize: vertical;
 }
@@ -408,6 +428,18 @@ h1 {
     cursor: help;
 }
 
+/* Table wrapper – scrollable and resizable */
+.table-wrapper {
+    overflow-y: auto;
+    resize: vertical;
+    min-height: 10rem;
+    max-height: 70vh;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
 /* Table */
 #results-table {
     width: 100%;
@@ -454,4 +486,32 @@ h1 {
 
 #results-table tbody tr:hover {
     background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+/* Words not in database */
+.unknown-words-section {
+    margin-bottom: 1.5rem;
+}
+
+.unknown-words-heading {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0 0 0.35rem;
+}
+
+.unknown-words-list {
+    font-size: 0.9rem;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Load status link */
+#load-status.ready a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+#load-status.ready a:hover {
+    text-decoration: none;
 }
