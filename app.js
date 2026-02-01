@@ -283,7 +283,7 @@ $(document).ready(function () {
             });
     }
 
-    function showTooltip(el, word) {
+    function showTooltip(el, word, openSearchIfNotFound) {
         const tip = document.getElementById('definition-tooltip');
         if (!tip) return;
         tip.innerHTML = '<span class="tooltip-loading">Loading…</span>';
@@ -305,7 +305,8 @@ $(document).ready(function () {
         fetchDefinition(word).then((text) => {
             if (text === DEFINITION_NOT_FOUND) {
                 const searchUrl = getSearchUrl(word);
-                tip.innerHTML = '<div class="tooltip-word">' + escapeHtml(word) + '</div><div class="tooltip-error">Definition not found.</div><a href="' + escapeHtml(searchUrl) + '" target="_blank" rel="noopener" class="tooltip-search-link">Search online</a>';
+                tip.innerHTML = '<div class="tooltip-word">' + escapeHtml(word) + '</div><div class="tooltip-error">Definition not found.</div><a href="' + escapeHtml(searchUrl) + '" target="_blank" rel="noopener" class="tooltip-search-link">Click to search online</a>';
+                if (openSearchIfNotFound) window.open(searchUrl, '_blank', 'noopener');
             } else {
                 tip.innerHTML = '<div class="tooltip-word">' + escapeHtml(word) + '</div><div>' + escapeHtml(text).replace(/\n\n/g, '</div><div>') + '</div>';
             }
@@ -328,12 +329,12 @@ $(document).ready(function () {
         if (!word) return;
         if (tooltipHoverTimer) clearTimeout(tooltipHoverTimer);
         tooltipHoverTimer = null;
-        showTooltip(el, word);
+        showTooltip(el, word, true);
     }
 
     function onWordHoverStart(el, word) {
         if (!word) return;
-        tooltipHoverTimer = setTimeout(() => showTooltip(el, word), 400);
+        tooltipHoverTimer = setTimeout(() => showTooltip(el, word, false), 400);
     }
 
     $('#highlighted-text').on('mouseenter', '.highlight', function () {
