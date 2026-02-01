@@ -286,7 +286,6 @@ $(document).ready(function () {
             if (text === DEFINITION_NOT_FOUND) {
                 const searchUrl = getSearchUrl(word);
                 tip.innerHTML = '<div class="tooltip-word">' + escapeHtml(word) + '</div><div class="tooltip-error">Definition not found.</div><a href="' + escapeHtml(searchUrl) + '" target="_blank" rel="noopener" class="tooltip-search-link">Search online</a>';
-                window.open(searchUrl, '_blank', 'noopener');
             } else {
                 tip.innerHTML = '<div class="tooltip-word">' + escapeHtml(word) + '</div><div>' + escapeHtml(text).replace(/\n\n/g, '</div><div>') + '</div>';
             }
