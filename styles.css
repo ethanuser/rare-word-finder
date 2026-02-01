@@ -1,0 +1,457 @@
+/* Rare Word Finder – modern styles */
+
+/* Shared (theme-independent) */
+:root {
+    --radius: 10px;
+    --radius-sm: 6px;
+    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Light theme (default; also used when system prefers light) */
+:root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --surface-elevated: #ebebed;
+    --border: #d1d1d6;
+    --text: #1d1d1f;
+    --text-muted: #6e6e73;
+    --accent: #5856d6;
+    --accent-hover: #4846c4;
+    --highlight-bg: #ffeb3b;
+    --success: #248a48;
+    --warning: #c4940e;
+    --error: #c41e3a;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Dark theme (when system prefers dark) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0f0f12;
+        --surface: #1a1a1f;
+        --surface-elevated: #23232a;
+        --border: #2e2e36;
+        --text: #e8e8ed;
+        --text-muted: #9a9aa6;
+        --accent: #7c6ef6;
+        --accent-hover: #9288f7;
+        --highlight-bg: #c1a505;
+        --success: #34c77b;
+        --warning: #e6b84a;
+        --error: #e65c5c;
+        --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+}
+
+/* Manual theme override (button toggle) */
+html[data-theme="light"] {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --surface-elevated: #ebebed;
+    --border: #d1d1d6;
+    --text: #1d1d1f;
+    --text-muted: #6e6e73;
+    --accent: #5856d6;
+    --accent-hover: #4846c4;
+    --highlight-bg: #ffeb3b;
+    --success: #248a48;
+    --warning: #c4940e;
+    --error: #c41e3a;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="dark"] {
+    --bg: #0f0f12;
+    --surface: #1a1a1f;
+    --surface-elevated: #23232a;
+    --border: #2e2e36;
+    --text: #e8e8ed;
+    --text-muted: #9a9aa6;
+    --accent: #7c6ef6;
+    --accent-hover: #9288f7;
+    --highlight-bg: #b8a84a;
+    --success: #34c77b;
+    --warning: #e6b84a;
+    --error: #e65c5c;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 2rem;
+    padding-bottom: 5rem;
+    min-height: 100vh;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text);
+    background: var(--bg);
+}
+
+@media (min-width: 640px) {
+    body {
+        padding: 2.5rem;
+        padding-bottom: 5rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+#theme-toggle {
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+#theme-toggle:hover {
+    background: var(--surface-elevated);
+    border-color: var(--accent);
+}
+
+/* Status bar */
+#load-status {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+}
+
+#load-status.loading {
+    background: color-mix(in srgb, var(--warning) 18%, transparent);
+    color: var(--warning);
+    border-color: color-mix(in srgb, var(--warning) 35%, transparent);
+}
+
+#load-status.ready {
+    background: color-mix(in srgb, var(--success) 14%, transparent);
+    color: var(--success);
+    border-color: color-mix(in srgb, var(--success) 30%, transparent);
+}
+
+#load-status.error {
+    background: color-mix(in srgb, var(--error) 14%, transparent);
+    color: var(--error);
+    border-color: color-mix(in srgb, var(--error) 30%, transparent);
+}
+
+#csv-file-input {
+    display: none;
+    margin-bottom: 1rem;
+}
+
+#csv-file-input label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+#csv-file-input input[type="file"] {
+    color: var(--text);
+    cursor: pointer;
+}
+
+/* Preset text dropdown */
+#preset-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+#preset-container label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+#text-preset {
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    min-width: 12rem;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236e6e73' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    background-size: 0.75rem;
+}
+
+#text-preset:hover,
+#text-preset:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+/* Textarea */
+#text-input {
+    width: 100%;
+    height: 200px;
+    padding: 1rem 1.1rem;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    resize: vertical;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#text-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+#text-input::placeholder {
+    color: var(--text-muted);
+}
+
+#text-input:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Slider – fixed to bottom of viewport */
+#slider-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    padding: 0.75rem 2rem;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 640px) {
+    #slider-container {
+        padding-left: max(2.5rem, calc((100vw - 900px) / 2 + 2.5rem));
+        padding-right: max(2.5rem, calc((100vw - 900px) / 2 + 2.5rem));
+    }
+}
+
+#slider-label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+#num-words-slider {
+    flex: 1;
+    min-width: 120px;
+    max-width: 280px;
+    height: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--surface-elevated);
+    border-radius: 4px;
+}
+
+#num-words-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+#num-words-slider::-webkit-slider-thumb:hover {
+    background: var(--accent-hover);
+    transform: scale(1.08);
+}
+
+#num-words-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s, transform 0.15s;
+}
+
+#num-words-slider::-moz-range-thumb:hover {
+    background: var(--accent-hover);
+    transform: scale(1.08);
+}
+
+#slider-value {
+    min-width: 1.8rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* Highlighted text section */
+.highlighted-heading {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0 0 0.5rem;
+}
+
+#highlighted-text {
+    padding: 1rem 1.1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    white-space: pre-wrap;
+    margin-bottom: 1.5rem;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 8rem;
+    max-height: 80vh;
+    overflow-y: auto;
+    resize: vertical;
+}
+
+.highlight {
+    background: var(--highlight-bg);
+    color: var(--text);
+    cursor: help;
+}
+
+.definition-tooltip {
+    position: fixed;
+    z-index: 1000;
+    max-width: 320px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--text);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s, visibility 0.15s;
+}
+
+.definition-tooltip.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.definition-tooltip .tooltip-word {
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--accent);
+}
+
+.definition-tooltip .tooltip-loading {
+    color: var(--text-muted);
+}
+
+.definition-tooltip .tooltip-error {
+    color: var(--error);
+}
+
+.definition-tooltip a.tooltip-search-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: var(--accent);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.definition-tooltip a.tooltip-search-link:hover {
+    text-decoration: underline;
+}
+
+/* Table word cell – same definition hover/click as highlights */
+#results-table .word-cell {
+    cursor: help;
+}
+
+/* Table */
+#results-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: var(--surface);
+}
+
+#results-table thead {
+    background: var(--surface-elevated);
+}
+
+#results-table th {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+}
+
+#results-table th a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+#results-table th a:hover {
+    text-decoration: underline;
+}
+
+#results-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+
+#results-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+#results-table tbody tr:hover {
+    background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}

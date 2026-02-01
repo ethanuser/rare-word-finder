@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rare Word Finder</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="page-header">
+        <h1>Rare Word Finder</h1>
+        <button type="button" id="theme-toggle" aria-label="Toggle light or dark mode">Dark mode</button>
+    </header>
+    <div id="load-status" class="loading">Loading word frequency data…</div>
+    <div id="csv-file-input">
+        <label>Or load CSV manually (if opening as file): <input type="file" id="csv-file" accept=".csv"></label>
+    </div>
+    <div id="preset-container">
+        <label for="text-preset">Load preset:</label>
+        <select id="text-preset" aria-label="Load a preset text">
+            <option value="">— Paste or choose —</option>
+        </select>
+    </div>
+    <textarea id="text-input" placeholder="Paste your text here..." disabled></textarea>
+    <p class="highlighted-heading">Rarest words highlighted below.</p>
+    <div id="highlighted-text"></div>
+    <div id="definition-tooltip" class="definition-tooltip" aria-hidden="true" role="tooltip"></div>
+    <table id="results-table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th id="word-col-header">Word</th>
+                <th>Frequency in English</th>
+                <th><a href="https://www.researchgate.net/figure/The-Zipf-scale-of-word-frequency_tbl1_259718817#:~:text=The%20Zipf%20value%20is%20calculated,et%20al.%2C%202014)%20." target="_blank" rel="noopener">Zipf Value</a></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="slider-container">
+        <label for="num-words-slider" id="slider-label">Number of rare words to highlight: </label>
+        <input type="range" id="num-words-slider" min="1" max="50" value="10">
+        <span id="slider-value">10</span>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/compromise"></script>
+    <script src="app.js"></script>
+</body>
+</html>
