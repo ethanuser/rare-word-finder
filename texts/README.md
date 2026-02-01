@@ -1,8 +1,20 @@
-# Preset texts for Rare Word Finder
+# Preset texts
 
-**No config.** Put `.txt` files in this folder. The app discovers them from the server’s directory listing when you load the page.
+**On GitHub Pages (and other static hosts):** The app loads presets from **`list.json`**. Add your filename to that array when you add a new `.txt` file so it appears in the dropdown.
+
+**When served locally** (e.g. `python3 -m http.server`): If `list.json` is missing or fails to load, the app falls back to discovering `.txt` files from the server’s directory listing.
 
 - Use UTF-8 encoding for your text files.
 - The dropdown label is the filename without `.txt` (e.g. `Bee Movie Script.txt` → **Bee Movie Script**).
 
-**Requirement:** The app must be served over HTTP (e.g. `python3 -m http.server` from the project root). Directory discovery does not work when opening `index.html` as a file.
+## Example `list.json`
+
+```json
+[
+  "sample.txt",
+  "Bee Movie Script.txt",
+  "My Essay.txt"
+]
+```
+
+Keep valid JSON: commas between entries, no trailing comma after the last one.

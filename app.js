@@ -119,28 +119,46 @@ function initPresets() {
     const select = document.getElementById('text-preset');
     if (!select) return;
 
-    fetch('texts/')
-        .then((res) => (res.ok ? res.text() : Promise.reject(new Error('Not ok'))))
-        .then((html) => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const links = doc.querySelectorAll('a[href]');
-            const seen = new Set();
-            links.forEach((a) => {
-                let href = (a.getAttribute('href') || '').trim();
-                if (!/\.txt$/i.test(href)) return;
-                try {
-                    href = decodeURIComponent(href);
-                } catch (e) {}
-                if (seen.has(href)) return;
-                seen.add(href);
-                const opt = document.createElement('option');
-                opt.value = 'texts/' + href;
-                opt.textContent = href.replace(/\.txt$/i, '');
-                select.appendChild(opt);
+    function addPresetOption(filename) {
+        const opt = document.createElement('option');
+        opt.value = 'texts/' + encodeURI(filename);
+        opt.textContent = filename.replace(/\.txt$/i, '');
+        select.appendChild(opt);
+    }
+
+    function tryDirectoryListing() {
+        return fetch('texts/')
+            .then((res) => (res.ok ? res.text() : Promise.reject(new Error('Not ok'))))
+            .then((html) => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const links = doc.querySelectorAll('a[href]');
+                const seen = new Set();
+                links.forEach((a) => {
+                    let href = (a.getAttribute('href') || '').trim();
+                    if (!/\.txt$/i.test(href)) return;
+                    try {
+                        href = decodeURIComponent(href);
+                    } catch (e) {}
+                    if (seen.has(href)) return;
+                    seen.add(href);
+                    addPresetOption(href);
+                });
             });
+    }
+
+    fetch('texts/list.json')
+        .then((res) => (res.ok ? res.json() : Promise.reject(new Error('No list'))))
+        .then((filenames) => {
+            if (Array.isArray(filenames)) {
+                filenames.forEach((filename) => {
+                    if (typeof filename === 'string' && filename.trim()) addPresetOption(filename.trim());
+                });
+            } else {
+                return tryDirectoryListing();
+            }
         })
-        .catch(() => {});
+        .catch(() => tryDirectoryListing());
 
     select.addEventListener('change', function () {
         const url = this.value;

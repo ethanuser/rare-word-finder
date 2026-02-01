@@ -23,7 +23,7 @@ If you open `index.html` as a file (`file://`), the app will prompt you to load 
 - **Rare-word highlighting** – Paste or type text; the app finds words that appear in the frequency dataset and highlights the rarest ones. You choose how many “rarest” words to highlight (slider at the bottom).
 - **Results table** – Rank, word, frequency in English, and Zipf value for every unique word in your text.
 - **Definitions** – Hover (after a short delay) or click a highlighted word or a word in the table to see a definition (via [Free Dictionary API](https://dictionaryapi.dev/)). If no definition is found, the tooltip offers a “Search online” link and clicking the word opens a Google “define …” search in a new tab.
-- **Preset texts** – Dropdown loads texts from the `texts/` folder. Add any `.txt` file there; the app discovers them from the server’s directory listing (no config file).
+- **Preset texts** – Dropdown loads texts from the `texts/` folder. On GitHub Pages (and other static hosts) the app uses `texts/list.json` to list presets; when adding a new `.txt` file, add its filename to that array. When served locally with a server that returns directory listings (e.g. Python’s `http.server`), the app can fall back to discovering `.txt` files automatically if `list.json` is missing.
 - **Light / dark mode** – Follows system preference; a button toggles and the choice is saved in `localStorage`.
 
 ---
@@ -38,7 +38,8 @@ If you open `index.html` as a file (`file://`), the app will prompt you to load 
 | `wordFrequencyData.csv` | Word → log-frequency (derived from `unigram_freq.csv`). |
 | `unigram_freq.csv` | Raw word counts (source data; not loaded by the app). |
 | `build_log_freq_csv.py` | Script to build `wordFrequencyData.csv` from `unigram_freq.csv`. |
-| `texts/` | Preset `.txt` files; dropdown lists them automatically when served over HTTP. |
+| `texts/` | Preset `.txt` files. |
+| `texts/list.json` | List of preset filenames (used on GitHub Pages and other static hosts). |
 
 See `texts/README.md` for adding your own preset texts.
 
