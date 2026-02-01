@@ -515,3 +515,49 @@ h1 {
 #load-status.ready a:hover {
     text-decoration: none;
 }
+
+/* Footer */
+.footer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    text-align: center;
+}
+
+.footer p {
+    margin: 0 0 0.5rem;
+}
+
+.footer p:last-child {
+    margin-bottom: 0;
+}
+
+.footer a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+.footer-github {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.footer-github:hover {
+    text-decoration: none;
+}
+
+.footer-github svg {
+    display: block;
+}
+
+.footer-donate {
+    margin-top: 0.75rem !important;
+}
