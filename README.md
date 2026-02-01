@@ -26,7 +26,7 @@ If you open `index.html` as a file (`file://`), the app will prompt you to load 
 
 - **Words not in database** – A section below the table lists words from your text that are not in the frequency database. The app splits on spaces, then on punctuation and dashes (hyphen, em dash, quotes, etc.), so tokens like `baby—the` or `four-fifths` are treated as separate words. Leading/trailing punctuation is stripped for display (e.g. `dyet,,` appears as `dyet`).
 
-- **Preset texts** – Dropdown loads texts from the `texts/` folder. On GitHub Pages (and other static hosts) the app uses `texts/list.json` to list presets; when adding a new `.txt` file, add its filename to that array. When served locally with a server that returns directory listings (e.g. Python’s `http.server`), the app can fall back to discovering `.txt` files automatically if `list.json` is missing.
+- **Preset texts** – Dropdown loads texts from the `texts/` folder. The included preset texts are from [Project Gutenberg](https://www.gutenberg.org/). On GitHub Pages (and other static hosts) the app uses `texts/list.json` to list presets; when adding a new `.txt` file, add its filename to that array. When served locally with a server that returns directory listings (e.g. Python’s `http.server`), the app can fall back to discovering `.txt` files automatically if `list.json` is missing.
 
 - **Light / dark mode** – Follows system preference; a button toggles and the choice is saved in `localStorage`.
 
@@ -44,7 +44,7 @@ If you open `index.html` as a file (`file://`), the app will prompt you to load 
 | `wordFrequencyData.csv` | Word → log-frequency (derived from `unigram_freq.csv`). |
 | `unigram_freq.csv` | Raw word counts (source data; not loaded by the app). |
 | `build_log_freq_csv.py` | Script to build `wordFrequencyData.csv` from `unigram_freq.csv`. |
-| `texts/` | Preset `.txt` files. |
+| `texts/` | Preset `.txt` files (included samples from Project Gutenberg). |
 | `texts/list.json` | List of preset filenames (used on GitHub Pages and other static hosts). |
 
 See `texts/README.md` for adding your own preset texts.
