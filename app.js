@@ -199,7 +199,7 @@ $(document).ready(function () {
         }
 
         words.forEach(word => {
-            const parts = word.split(/-/);
+            const parts = word.split(/[^a-zA-Z']+/).filter(Boolean);
             parts.forEach((part) => {
                 const normalized = part.toLowerCase().replace(/[^a-z]/g, '');
                 if (!normalized) return;
@@ -220,8 +220,9 @@ $(document).ready(function () {
             const word = item[0];
             const logFrequency = item[1];
             const frequency = Math.exp(logFrequency);
+            const inverseFreq = Math.round(1 / frequency);
             const zipf = (Math.log10(frequency) + 9).toFixed(2);
-            return [index + 1, word, frequency.toExponential(1), zipf];
+            return [index + 1, word, frequency.toExponential(1), inverseFreq, zipf];
         });
 
         highlightText(text, rarestWords);
