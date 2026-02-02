@@ -68,3 +68,9 @@ See `texts/README.md` for adding your own preset texts.
 - [jQuery](https://jquery.com/) and [Compromise](https://github.com/spencermountain/compromise) (nlp.js) for tokenization.
 - [Free Dictionary API](https://dictionaryapi.dev/) for definitions (no API key).
 - No build step; run any static server from the project root.
+
+---
+
+## Support
+
+If this tool helped you, you can [buy me a coffee](https://buymeacoffee.com/ethannguyen).
