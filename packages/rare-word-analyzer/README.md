@@ -4,11 +4,19 @@ Analyze text against a word-frequency map: find rarest words, unknown words, and
 
 ## Install
 
+**From npm** (no auth):
+
 ```bash
 npm install rare-word-analyzer
 ```
 
-Or use the script in this repo (no build step):
+**From GitHub Packages** (after [authenticating](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages) to `npm.pkg.github.com`):
+
+```bash
+npm install @ethanuser/rare-word-analyzer
+```
+
+**Or** use the script in this repo (no build step):
 
 ```html
 <script src="path/to/packages/rare-word-analyzer/index.js"></script>
@@ -45,6 +53,7 @@ const freq = parseFrequencyCSV(csv);
 const result = analyzeText('The rare word.', freq, { topRarest: 5 });
 // result.rarestWords, result.unknownWords, result.tableData, result.unknownSet
 ```
+---
 
 ## License
 
