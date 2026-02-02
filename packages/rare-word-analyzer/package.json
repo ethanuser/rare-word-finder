@@ -1,0 +1,23 @@
+{
+  "name": "rare-word-analyzer",
+  "version": "1.0.0",
+  "description": "Analyze text against a word-frequency map: find rarest words, unknown words, and table data.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ethanuser/rare-word-finder.git",
+    "directory": "packages/rare-word-analyzer"
+  },
+  "keywords": [
+    "word-frequency",
+    "vocabulary",
+    "rare-words",
+    "text-analysis"
+  ],
+  "author": "",
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "README.md"
+  ]
+}

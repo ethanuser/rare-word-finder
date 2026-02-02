@@ -34,13 +34,20 @@ If you open `index.html` as a file (`file://`), the app will prompt you to load 
 
 ---
 
+## Package
+
+The analysis logic (parse frequency CSV, find rarest/unknown words, table data) lives in **[rare-word-analyzer](packages/rare-word-analyzer)**. The app loads it via a script tag; you can also use it in Node or other projects. See [packages/rare-word-analyzer/README.md](packages/rare-word-analyzer/README.md) for API and `npm install rare-word-analyzer`.
+
+---
+
 ## File structure
 
 | Path | Purpose |
 |------|--------|
 | `index.html` | Single-page app shell. |
-| `app.js` | Logic: CSV load, text processing, highlighting, table, definitions, presets, theme, unknown-words list. |
+| `app.js` | UI logic: CSV load, highlighting DOM, table, definitions, presets, theme (uses `rare-word-analyzer` for analysis). |
 | `styles.css` | Layout and theme (light/dark). |
+| `packages/rare-word-analyzer/` | **rare-word-analyzer** package: parse frequency CSV, analyze text (rarest/unknown words, table data). |
 | `wordFrequencyData.csv` | Word → log-frequency (derived from `unigram_freq.csv`). |
 | `unigram_freq.csv` | Raw word counts (source data; not loaded by the app). |
 | `build_log_freq_csv.py` | Script to build `wordFrequencyData.csv` from `unigram_freq.csv`. |
@@ -65,7 +72,8 @@ See `texts/README.md` for adding your own preset texts.
 ## Tech
 
 - Plain HTML, CSS, and JavaScript.
-- [jQuery](https://jquery.com/) and [Compromise](https://github.com/spencermountain/compromise) (nlp.js) for tokenization.
+- **[rare-word-analyzer](packages/rare-word-analyzer)** (in-repo package) for word-frequency analysis (parse CSV, rarest/unknown words, table data).
+- [jQuery](https://jquery.com/) for DOM and events.
 - [Free Dictionary API](https://dictionaryapi.dev/) for definitions (no API key).
 - No build step; run any static server from the project root.
 

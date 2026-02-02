@@ -36,20 +36,9 @@ function initTheme() {
 }
 
 function parseCSV(csvText) {
-    const lines = csvText.trim().split('\n');
-    if (lines.length < 2) return {};
-    const result = {};
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i];
-        const commaIndex = line.indexOf(',');
-        if (commaIndex === -1) continue;
-        const word = line.slice(0, commaIndex).trim();
-        const logFreq = parseFloat(line.slice(commaIndex + 1).trim());
-        if (word && !isNaN(logFreq)) {
-            result[word] = logFreq;
-        }
-    }
-    return result;
+    return typeof RareWordAnalyzer !== 'undefined' && RareWordAnalyzer.parseFrequencyCSV
+        ? RareWordAnalyzer.parseFrequencyCSV(csvText)
+        : {};
 }
 
 function setStatus(el, status, message) {
@@ -185,50 +174,18 @@ $(document).ready(function () {
 
     function processText() {
         const text = $('#text-input').val();
-        const numWords = $('#num-words-slider').val();
+        const numWords = parseInt($('#num-words-slider').val(), 10) || 10;
 
         if (Object.keys(wordFrequency).length === 0) return;
-
-        const doc = nlp(text);
-        const words = doc.text().split(/\s+/);
-        const wordFreq = {};
-        const unknownWords = new Map();
-
-        function stripLeadingTrailingPunctuation(s) {
-            return s.replace(/^[^a-zA-Z']+|[^a-zA-Z']+$/g, '') || s;
+        if (typeof RareWordAnalyzer === 'undefined' || !RareWordAnalyzer.analyzeText) {
+            return;
         }
 
-        words.forEach(word => {
-            const parts = word.split(/[^a-zA-Z']+/).filter(Boolean);
-            parts.forEach((part) => {
-                const normalized = part.toLowerCase().replace(/[^a-z]/g, '');
-                if (!normalized) return;
-                const displayForm = stripLeadingTrailingPunctuation(part);
-                if (wordFrequency[normalized] !== undefined) {
-                    wordFreq[normalized] = wordFrequency[normalized];
-                } else {
-                    if (!unknownWords.has(normalized)) {
-                        unknownWords.set(normalized, displayForm);
-                    }
-                }
-            });
-        });
+        const result = RareWordAnalyzer.analyzeText(text, wordFrequency, { topRarest: numWords });
 
-        const sortedFreq = Object.entries(wordFreq).sort((a, b) => a[1] - b[1]);
-        const rarestWords = sortedFreq.slice(0, numWords).map(item => item[0]);
-        const unknownSet = new Set(unknownWords.keys());
-        const tableData = sortedFreq.map((item, index) => {
-            const word = item[0];
-            const logFrequency = item[1];
-            const frequency = Math.exp(logFrequency);
-            const inverseFreq = Math.round(1 / frequency);
-            const zipf = (Math.log10(frequency) + 9).toFixed(2);
-            return [index + 1, word, frequency.toExponential(1), inverseFreq, zipf];
-        });
-
-        highlightText(text, rarestWords, unknownSet);
-        displayTable(tableData);
-        displayUnknownWords(Array.from(unknownWords.values()).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })));
+        highlightText(text, result.rarestWords, result.unknownSet);
+        displayTable(result.tableData);
+        displayUnknownWords(result.unknownWords);
     }
 
     $('#text-input').on('input', processText);
