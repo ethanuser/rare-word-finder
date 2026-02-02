@@ -238,13 +238,45 @@ $(document).ready(function () {
     });
 
     function highlightText(text, rarestWords) {
-        let highlightedText = text;
-        rarestWords.forEach(function (word) {
-            const regex = new RegExp(`\\b${escapeRegExp(word)}\\b`, 'gi');
-            const wordKey = word.toLowerCase();
-            highlightedText = highlightedText.replace(regex, (match) => `<span class="highlight" data-word="${escapeHtml(wordKey)}">${escapeHtml(match)}</span>`);
-        });
-        $('#highlighted-text').html(highlightedText.replace(/\n/g, '<br>'));
+        const container = document.getElementById('highlighted-text');
+        if (!container) return;
+        container.replaceChildren();
+
+        if (!text) return;
+        if (!Array.isArray(rarestWords) || rarestWords.length === 0) {
+            container.textContent = text;
+            return;
+        }
+
+        // Build a single regex like: \b(?:word1|word2|...)\b (case-insensitive)
+        // This avoids inserting user-provided text into innerHTML (XSS-safe).
+        const pattern = rarestWords.map(escapeRegExp).join('|');
+        const regex = new RegExp(`\\b(?:${pattern})\\b`, 'gi');
+
+        const frag = document.createDocumentFragment();
+        let lastIndex = 0;
+        let match;
+        while ((match = regex.exec(text)) !== null) {
+            const start = match.index;
+            const end = regex.lastIndex;
+            if (start > lastIndex) {
+                frag.appendChild(document.createTextNode(text.slice(lastIndex, start)));
+            }
+
+            const span = document.createElement('span');
+            span.className = 'highlight';
+            span.dataset.word = match[0].toLowerCase();
+            span.textContent = match[0]; // preserves original casing
+            frag.appendChild(span);
+
+            lastIndex = end;
+        }
+
+        if (lastIndex < text.length) {
+            frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+        }
+
+        container.appendChild(frag);
     }
 
     const definitionCache = {};

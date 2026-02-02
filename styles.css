@@ -491,6 +491,7 @@ h1 {
 
 /* Words not in database */
 .unknown-words-section {
+    display: none;
     margin-bottom: 1.5rem;
 }
 
