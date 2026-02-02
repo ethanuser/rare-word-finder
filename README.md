@@ -18,7 +18,7 @@ If you open `index.html` as a file (`file://`), the app will prompt you to load 
 
 ## Features
 
-- **Rare-word highlighting** – Paste or type text; the app finds words that appear in the frequency dataset and highlights the rarest ones. You choose how many “rarest” words to highlight (slider fixed at the bottom). The highlighted text area and results table are scrollable and resizable.
+- **Rare-word highlighting** – Paste or type text; the app finds words that appear in the frequency dataset and highlights the rarest ones. **Highlight colors:** **yellow/gold** = rarest words (in the database); **pink** = words not in the database. You choose how many “rarest” words to highlight (slider fixed at the bottom). The highlighted text area and results table are scrollable and resizable.
 
 - **Results table** – For every unique word in your text that appears in the database: **Rank**, **Word**, **Frequency in English**, **1 / Frequency** (inverse of frequency, rounded to the nearest integer), and **Zipf value**. Hover or click a word in the table to see its definition (same as for highlighted words).
 

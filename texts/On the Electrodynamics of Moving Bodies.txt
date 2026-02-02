@@ -1,0 +1,61 @@
+On the Electrodynamics of Moving Bodies
+By A. Einstein (1905)
+
+INTRODUCTION.
+
+It is well known that if we attempt to apply Maxwell's electrodynamics, as conceived at the present time, to moving bodies, we are led to asymmetry which does not agree with observed phenomena. Let us think of the mutual action between a magnet and a conductor. The observed phenomena in this case depend only on the relative motion of the conductor and the magnet, while according to the usual conception, a distinction must be made between the cases where the one or the other of the bodies is in motion. If, for example, the magnet moves and the conductor is at rest, then an electric field of certain energy-value is produced in the neighbourhood of the magnet, which excites a current in those parts of the field where a conductor exists. But if the magnet be at rest and the conductor be set in motion, no electric field is produced in the neighbourhood of the magnet, but an electromotive force which corresponds to no energy in itself is produced in the conductor; this causes an electric current of the same magnitude and the same career as the electric force, it being of course assumed that the relative motion in both of these cases is the same.
+
+Examples of a similar kind such as the unsuccessful attempt to substantiate the motion of the earth relative to the "Light-medium" lead us to the supposition that not only in mechanics, but also in electrodynamics, no properties of observed facts correspond to a concept of absolute rest; but that for all coordinate systems for which the mechanical equations hold, the equivalent electrodynamical and optical equations hold also, as has already been shown for magnitudes of the first order. In the following we make these assumptions (which we shall subsequently call the Principle of Relativity) and introduce the further assumption—an assumption which is at the first sight quite irreconcilable with the former one—that light is propagated in vacant space, with a velocity c which is independent of the nature of motion of the emitting body. These two assumptions are quite sufficient to give us a simple and consistent theory of electrodynamics of moving bodies on the basis of the Maxwellian theory for bodies at rest. The introduction of a "Light-ether" will be proved to be superfluous, for according to the conceptions which will be developed, we shall introduce neither a space absolutely at rest, and endowed with special properties, nor shall we associate a velocity-vector with a point in which electro-magnetic processes take place.
+
+Like every other theory in electrodynamics, the theory is based on the kinematics of rigid bodies; in the enunciation of every theory, we have to do with relations between rigid bodies (co-ordinate system), clocks, and electromagnetic processes. An insufficient consideration of these circumstances is the cause of difficulties with which the electrodynamics of moving bodies have to fight at present.
+
+I. — KINEMATICAL PORTION.
+
+§ 1. Definition of Synchronism.
+
+Let us have a co-ordinate system, in which the Newtonian equations hold. For distinguishing this system from another which will be introduced hereafter, we shall always call it "the stationary system."
+
+If a material point be at rest in this system, then its position in this system can be found out by a measuring rod, and can be expressed by the methods of Euclidean Geometry, or in Cartesian co-ordinates.
+
+If we wish to describe the motion of a material point, the values of its coordinates must be expressed as functions of time. It is always to be borne in mind that such a mathematical definition has a physical sense, only when we have a clear notion of what is meant by time. We have to take into consideration the fact that those of our conceptions, in which time plays a part, are always conceptions of synchronism. For example, we say that a train arrives here at 7 o'clock; this means that the exact pointing of the little hand of my watch to 7, and the arrival of the train are synchronous events.
+
+It may appear that all difficulties connected with the definition of time can be removed when in place of time, we substitute the position of the little hand of my watch. Such a definition is in fact sufficient, when it is required to define time exclusively for the place at which the clock is stationed. But the definition is not sufficient when it is required to connect by time events taking place at different stations—or what amounts to the same thing—to estimate by means of time the occurrence of events, which take place at stations distant from the clock.
+
+Now with regard to this attempt; the time-estimation of events, we can satisfy ourselves in the following manner. Suppose an observer who is stationed at the origin of coordinates with the clock associates a ray of light which comes to him through space, and gives testimony to the event of which the time is to be estimated—with the corresponding position of the hands of the clock. But such an association has this defect—it depends on the position of the observer provided with the clock, as we know by experience. We can attain to a more practicable result by the following treatment.
+
+If an observer be stationed at A with a clock, he can estimate the time of events occurring in the immediate neighbourhood of A, by looking for the position of the hands of the clock, which are synchronous with the event. If an observer be stationed at B with a clock—we should add that the clock is of the same nature as the one at A—he can estimate the time of events occurring about B. But without further premises, it is not possible to compare, as far as time is concerned, the events at B with the events at A. We have hitherto an A-time, and a B-time, but no time common to A and B. This last time (i.e., common time) can be defined, if we establish by definition that the time which light requires in travelling from A to B is equivalent to the time which light requires in travelling from B to A.
+
+We assume that this definition of synchronism is possible without involving any inconsistency, for any number of points, therefore the following relations hold:
+
+1. If the clock at B be synchronous with the clock at A, then the clock at A is synchronous with the clock at B.
+2. If the clock at A as well as the clock at B are both synchronous with the clock at C, then the clocks at A and B are synchronous.
+
+Thus with the help of certain physical experiences, we have established what we understand when we speak of clocks at rest at different stations, and synchronous with one another; and thereby we have arrived at a definition of synchronism and time.
+
+In accordance with experience we shall assume that the magnitude 2 AB / (t'_A - t_A) = c, where c is a universal constant.
+
+We have defined time essentially with a clock at rest in a stationary system. On account of its adaptability to the stationary system, we call the time defined in this way as "time of the stationary system."
+
+§ 2. On the Relativity of Length and Time.
+
+The following reflections are based on the Principle of Relativity and on the Principle of Constancy of the velocity of light, both of which we define in the following way:
+
+1. The laws according to which the nature of physical systems alter are independent of the manner in which these changes are referred to two co-ordinate systems which have a uniform translatory motion relative to each other.
+
+2. Every ray of light moves in the "stationary co-ordinate system" with the same velocity c, the velocity being independent of the condition whether this ray of light is emitted by a body at rest or in motion.
+
+Let us have a rigid rod at rest; this has a length l, when measured by a measuring rod at rest; we suppose that the axis of the rod is laid along the X-axis of the system at rest, and then a uniform velocity v, parallel to the axis of X, is imparted to it. Let us now enquire about the length of the moving rod; this can be obtained by either of these operations:
+
+(a) The observer provided with the measuring rod moves along with the rod to be measured, and measures by direct superposition the length of the rod: just as if the observer, the measuring rod, and the rod to be measured were at rest.
+
+(b) The observer finds out, by means of clocks placed in a system at rest (the clocks being synchronous as defined in § 1), the points of this system where the ends of the rod to be measured occur at a particular time t. The distance between these two points, measured by the previously used measuring rod, this time it being at rest, is a length, which we may call the "length of the rod."
+
+According to the Principle of Relativity, the length found out by the operation (a), which we may call "the length of the rod in the moving system" is equal to the length l of the rod in the stationary system.
+
+The length which is found out by the second method, may be called "the length of the moving rod measured from the stationary system". This length is to be estimated on the basis of our principle, and we shall find it to be different from l.
+
+In the generally recognised kinematics, we silently assume that the lengths defined by these two operations are equal, or in other words, that at an epoch of time t, a moving rigid body is geometrically replaceable by the same body, which can replace it in the condition of rest.
+
+We therefore see that we can attach no absolute significance to the concept of synchronism; but two events which are synchronous when viewed from one system, will not be synchronous when viewed from a system moving relatively to this system.
+
+Source: Wikisource, On the Electrodynamics of Moving Bodies (1920 edition). Public domain.

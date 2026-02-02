@@ -15,9 +15,10 @@
     --border: #d1d1d6;
     --text: #1d1d1f;
     --text-muted: #6e6e73;
-    --accent: #5856d6;
-    --accent-hover: #4846c4;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
     --highlight-bg: #ffeb3b;
+    --highlight-unknown-bg: #f8b4d4;
     --success: #248a48;
     --warning: #c4940e;
     --error: #c41e3a;
@@ -33,9 +34,10 @@
         --border: #2e2e36;
         --text: #e8e8ed;
         --text-muted: #9a9aa6;
-        --accent: #7c6ef6;
-        --accent-hover: #9288f7;
-        --highlight-bg: #c1a505;
+        --accent: #3b82f6;
+        --accent-hover: #60a5fa;
+        --highlight-bg: #ae9400;
+        --highlight-unknown-bg: #c45a8a;
         --success: #34c77b;
         --warning: #e6b84a;
         --error: #e65c5c;
@@ -51,9 +53,10 @@ html[data-theme="light"] {
     --border: #d1d1d6;
     --text: #1d1d1f;
     --text-muted: #6e6e73;
-    --accent: #5856d6;
-    --accent-hover: #4846c4;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
     --highlight-bg: #ffeb3b;
+    --highlight-unknown-bg: #f8b4d4;
     --success: #248a48;
     --warning: #c4940e;
     --error: #c41e3a;
@@ -67,9 +70,10 @@ html[data-theme="dark"] {
     --border: #2e2e36;
     --text: #e8e8ed;
     --text-muted: #9a9aa6;
-    --accent: #7c6ef6;
-    --accent-hover: #9288f7;
-    --highlight-bg: #b8a84a;
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --highlight-bg: #978100;
+    --highlight-unknown-bg: #c45a8a;
     --success: #34c77b;
     --warning: #e6b84a;
     --error: #e65c5c;
@@ -128,6 +132,12 @@ body {
 
 .app-description strong {
     color: var(--text);
+}
+
+/* Legend uses same .highlight / .highlight-unknown as in-text; only add spacing and default cursor */
+.app-description .highlight {
+    padding: 0 0.35em;
+    cursor: default;
 }
 
 h1 {
@@ -373,6 +383,12 @@ h1 {
     background: var(--highlight-bg);
     color: var(--text);
     cursor: help;
+}
+
+/* Words not in the frequency database */
+.highlight-unknown {
+    background: var(--highlight-unknown-bg);
+    color: var(--text);
 }
 
 .definition-tooltip {

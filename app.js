@@ -216,6 +216,7 @@ $(document).ready(function () {
 
         const sortedFreq = Object.entries(wordFreq).sort((a, b) => a[1] - b[1]);
         const rarestWords = sortedFreq.slice(0, numWords).map(item => item[0]);
+        const unknownSet = new Set(unknownWords.keys());
         const tableData = sortedFreq.map((item, index) => {
             const word = item[0];
             const logFrequency = item[1];
@@ -225,7 +226,7 @@ $(document).ready(function () {
             return [index + 1, word, frequency.toExponential(1), inverseFreq, zipf];
         });
 
-        highlightText(text, rarestWords);
+        highlightText(text, rarestWords, unknownSet);
         displayTable(tableData);
         displayUnknownWords(Array.from(unknownWords.values()).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' })));
     }
@@ -237,36 +238,42 @@ $(document).ready(function () {
         processText();
     });
 
-    function highlightText(text, rarestWords) {
+    function highlightText(text, rarestWords, unknownWordsSet) {
         const container = document.getElementById('highlighted-text');
         if (!container) return;
         container.replaceChildren();
 
         if (!text) return;
-        if (!Array.isArray(rarestWords) || rarestWords.length === 0) {
-            container.textContent = text;
-            return;
-        }
 
-        // Build a single regex like: \b(?:word1|word2|...)\b (case-insensitive)
-        // This avoids inserting user-provided text into innerHTML (XSS-safe).
-        const pattern = rarestWords.map(escapeRegExp).join('|');
-        const regex = new RegExp(`\\b(?:${pattern})\\b`, 'gi');
+        // Single pass: find all word tokens (letters and apostrophes), then classify as rare, unknown, or neither.
+        // XSS-safe: we only use match[0] as textContent, never innerHTML.
+        const wordRegex = /\b[a-zA-Z']+\b/g;
+        const rarestSet = new Set(Array.isArray(rarestWords) ? rarestWords.map(w => w.toLowerCase()) : []);
+        const unknownSet = unknownWordsSet instanceof Set ? unknownWordsSet : new Set();
 
         const frag = document.createDocumentFragment();
         let lastIndex = 0;
         let match;
-        while ((match = regex.exec(text)) !== null) {
+        while ((match = wordRegex.exec(text)) !== null) {
             const start = match.index;
-            const end = regex.lastIndex;
+            const end = wordRegex.lastIndex;
             if (start > lastIndex) {
                 frag.appendChild(document.createTextNode(text.slice(lastIndex, start)));
             }
 
+            const normalized = match[0].toLowerCase().replace(/[^a-z]/g, '');
             const span = document.createElement('span');
-            span.className = 'highlight';
             span.dataset.word = match[0].toLowerCase();
             span.textContent = match[0]; // preserves original casing
+            if (rarestSet.has(normalized)) {
+                span.className = 'highlight';
+            } else if (unknownSet.has(normalized)) {
+                span.className = 'highlight highlight-unknown';
+            } else {
+                frag.appendChild(document.createTextNode(match[0]));
+                lastIndex = end;
+                continue;
+            }
             frag.appendChild(span);
 
             lastIndex = end;
