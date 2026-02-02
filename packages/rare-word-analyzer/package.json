@@ -1,6 +1,6 @@
 {
   "name": "@ethanuser/rare-word-analyzer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Analyze text against a word-frequency map: find rarest words, unknown words, and table data.",
   "main": "index.js",
   "publishConfig": {
