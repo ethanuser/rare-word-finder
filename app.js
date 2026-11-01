@@ -350,7 +350,7 @@ function replaceText(text, source) {
 function setEditorText(text) {
     const input = el('text-input');
     input.value = text;
-    input.scrollTop = 0;
+    el('doc-scroll').scrollTop = 0;
     closeDetail();
     syncLibrary();
     processText();
@@ -571,11 +571,14 @@ function highlightText(text, rarestWords, unknownWordsSet) {
     frag.appendChild(document.createTextNode(text.slice(lastIndex) + '\n'));
 
     container.replaceChildren(frag);
-    syncHighlightScroll();
+    el('doc-sheet').style.minHeight = '';
 }
 
-function syncHighlightScroll() {
-    el('highlighted-text').scrollTop = el('text-input').scrollTop;
+// New lines reach the highlight layer a moment after the editor, so hold the sheet open until then.
+function growEditorSheet() {
+    const input = el('text-input');
+    if (input.scrollHeight > input.clientHeight) el('doc-sheet').style.minHeight = input.scrollHeight + 'px';
+    input.scrollTop = 0;
 }
 
 function renderCounts() {
@@ -883,12 +886,12 @@ function showOccurrence(scroll) {
     const span = state.occurrences[state.occurrenceIndex];
     if (span) {
         span.classList.add('is-current');
-        const input = el('text-input');
-        if (scroll && input.offsetParent) {
+        const scroller = el('doc-scroll');
+        if (scroll && scroller.offsetParent) {
             // A long smooth scroll outruns painting and flashes an empty pane, so far jumps are instant.
-            const top = span.offsetTop - input.clientHeight / 2;
-            const nearby = Math.abs(top - input.scrollTop) < input.clientHeight * 2;
-            input.scrollTo({ top, behavior: nearby && !reducedMotion() ? 'smooth' : 'auto' });
+            const top = span.offsetTop - scroller.clientHeight / 2;
+            const nearby = Math.abs(top - scroller.scrollTop) < scroller.clientHeight * 2;
+            scroller.scrollTo({ top, behavior: nearby && !reducedMotion() ? 'smooth' : 'auto' });
         }
     }
     renderOccurrenceCount();
@@ -1127,8 +1130,7 @@ function initEditorWords() {
         selectSpan(span);
     });
 
-    input.addEventListener('scroll', function () {
-        syncHighlightScroll();
+    el('doc-scroll').addEventListener('scroll', function () {
         setHoverSpan(null);
     });
 }
@@ -1236,6 +1238,7 @@ function init() {
     el('text-input').addEventListener('input', function () {
         state.activePreset = '';
         syncLibrary();
+        growEditorSheet();
         clearTimeout(state.analyzeTimer);
         // Long texts wait for a pause in typing, because each analysis takes a noticeable moment.
         if (this.value.length > LARGE_TEXT_LENGTH) state.analyzeTimer = setTimeout(() => queueRender(processText), 200);

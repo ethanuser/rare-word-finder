@@ -548,19 +548,29 @@ h1 {
     min-height: 0;
 }
 
-/* The highlights live in a layer behind a transparent editor. Both must wrap
-   identically, so every property affecting text layout is shared here. */
-#text-input,
-#highlighted-text {
+/* The highlights and the editor share one scroller, so the browser moves them as a
+   single surface. Syncing two scrollers from a scroll event always trails at speed. */
+.doc-scroll {
     position: absolute;
     inset: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: var(--space-6) max(var(--space-6), calc((100% - 72ch) / 2));
     overflow-x: hidden;
     overflow-y: scroll;
+}
+
+.doc-sheet {
+    position: relative;
+    min-height: 100%;
+}
+
+/* The highlight layer sets the sheet's height and the editor fills it, so neither
+   scrolls itself. Both must wrap identically, so every property affecting text layout
+   is shared here. */
+#text-input,
+#highlighted-text {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: var(--space-6) max(var(--space-6), calc((100% - 72ch) / 2));
     font-family: inherit;
     font-size: var(--text-base);
     line-height: 1.7;
@@ -573,7 +583,11 @@ h1 {
 }
 
 #text-input {
+    position: absolute;
+    inset: 0;
     z-index: 1;
+    height: 100%;
+    overflow: hidden;
     color: var(--text);
     outline: none;
     resize: none;
@@ -592,9 +606,9 @@ h1 {
 }
 
 #highlighted-text {
+    position: relative;
     color: transparent;
     pointer-events: none;
-    scrollbar-color: transparent transparent;
 }
 
 /* A textarea has one text color, and dark mode's is too light for bright highlights.
