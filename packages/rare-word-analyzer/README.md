@@ -37,6 +37,7 @@ Parse a CSV string with columns `word, log_frequency` (first line = header). Ret
 - **wordFrequencyMap** (object): Map of word → log frequency (e.g. from `parseFrequencyCSV`).
 - **options** (object, optional):
   - **topRarest** (number, default `10`): Number of rarest words to return.
+  - **groupForms** (boolean, default `false`): Count inflected forms of a word as one word, so `gloated` and `gloating` become `gloat`.
 
 Returns:
 
@@ -44,6 +45,14 @@ Returns:
 - **unknownWords**: Array of display forms of words not in the frequency map (sorted).
 - **unknownSet**: Set of normalized unknown words (for highlighting).
 - **tableData**: Array of rows `[rank, word, frequencyStr, inverseFreq, zipf]` for the table.
+- **baseForms**: Map of each normalized word in the text to its base form (itself unless `groupForms` is on).
+- **forms**: Object of base form → the forms found in the text.
+- **counts**: Object of base form → how many times it appears.
+- **stats**: `{ totalWords, knownWords, rareWords, rareShare }`. `rareShare` is the share of known words with a Zipf value below 3.
+
+### `findBaseForm(word, wordFrequencyMap)`
+
+Returns the base form of a normalized word if one is in the map and about as common as the word or more so, otherwise the word itself.
 
 ## Example
 

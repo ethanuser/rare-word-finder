@@ -1,11 +1,11 @@
 # Preset texts
 
-**On GitHub Pages (and other static hosts):** The app loads presets from **`list.json`**. Add your filename to that array when you add a new `.txt` file so it appears in the dropdown.
+**On GitHub Pages (and other static hosts):** The app loads presets from **`list.json`**. Add your filename to that array when you add a new `.txt` file so it appears in the Library.
 
 **When served locally** (e.g. `python3 -m http.server`): If `list.json` is missing or fails to load, the app falls back to discovering `.txt` files from the server’s directory listing.
 
 - Use UTF-8 encoding for your text files.
-- The dropdown label is the filename without `.txt` (e.g. `Bee Movie Script.txt` → **Bee Movie Script**).
+- The Library label is the filename without `.txt` (e.g. `Bee Movie Script.txt` → **Bee Movie Script**).
 
 ## Example `list.json`
 

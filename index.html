@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' https://code.jquery.com https://unpkg.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.dictionaryapi.dev; img-src 'self' data:; upgrade-insecure-requests">
+    <meta name="color-scheme" content="light dark">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://api.dictionaryapi.dev; img-src 'self' data:; upgrade-insecure-requests">
     <title>Rare Word Finder</title>
     <link rel="icon" type="image/png" href="favicons/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="favicons/favicon.svg" />
@@ -12,81 +13,271 @@
     <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="Rare Word Finder" />
     <link rel="manifest" href="favicons/site.webmanifest" />
+    <script src="theme-init.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="page-header">
-        <h1>Rare Word Finder</h1>
-        <button type="button" id="theme-toggle" aria-label="Toggle light or dark mode">Dark mode</button>
-    </header>
-    <div class="app-description">
-        <p>Use this tool to sift through any text and surface words that appear less often in English.</p>
-        <p><strong>Highlight colors:</strong> <span class="highlight">Yellow/gold</span> = rarest words (in the frequency database); <span class="highlight highlight-unknown">pink</span> = words not in the database.</p>
-        <p><strong>Dictionary:</strong> Hover over or click on a highlighted word, or any word in the results table to see its definition in a tooltip. If no definition is found, click the word to look it up in a new tab.</p>
-    </div>
-    <div id="load-status" class="loading">Loading word frequency data…</div>
-    <div id="csv-file-input">
-        <label>Or load CSV manually (if opening as file): <input type="file" id="csv-file" accept=".csv"></label>
-    </div>
-    <div id="preset-container">
-        <label for="text-preset">Load preset:</label>
-        <select id="text-preset" aria-label="Load a preset text">
-            <option value="">— Paste or choose —</option>
-        </select>
-    </div>
-    <textarea id="text-input" placeholder="Paste your text here..." disabled></textarea>
-    <p class="highlighted-heading">Rarest words highlighted below.</p>
-    <div id="highlighted-text"></div>
-    <div id="definition-tooltip" class="definition-tooltip" aria-hidden="true" role="tooltip"></div>
-    <div class="table-wrapper">
-        <table id="results-table">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th id="word-col-header">Word</th>
-                    <th>Frequency in English</th>
-                    <th>1 / Frequency</th>
-                    <th><a href="https://www.researchgate.net/figure/The-Zipf-scale-of-word-frequency_tbl1_259718817#:~:text=The%20Zipf%20value%20is%20calculated,et%20al.%2C%202014)%20." target="_blank" rel="noopener">Zipf Value</a></th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div id="unknown-words-section" class="unknown-words-section" aria-label="Words not in database">
-        <p class="unknown-words-heading">Words not in database</p>
-        <p id="unknown-words-list" class="unknown-words-list"></p>
-    </div>
-    <div id="slider-container">
-        <label for="num-words-slider" id="slider-label">Number of rare words to highlight: </label>
-        <input type="range" id="num-words-slider" min="1" max="50" value="10">
-        <span id="slider-value">10</span>
+    <svg class="icon-sprite" aria-hidden="true">
+        <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7c-2-1.6-4.6-2-8-2v13c3.4 0 6 .4 8 2 2-1.6 4.6-2 8-2V5c-3.4 0-6 .4-8 2zM12 7v13"/></symbol>
+        <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 20c1-3.5 3.6-5 7-5s6 1.5 7 5"/></symbol>
+        <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></symbol>
+        <symbol id="i-message" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+        <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M5 9h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5zM17 10h1.5a2.5 2.5 0 0 1 0 5H17M9 3v3M13 3v3"/></symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+        <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></symbol>
+        <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/></symbol>
+        <symbol id="i-keyboard" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></symbol>
+        <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+        <symbol id="i-paste" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 5a3 3 0 0 1 6 0v1H9zM9 12h6M9 16h4"/></symbol>
+        <symbol id="i-upload" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M12 17v-6M9.5 13.5L12 11l2.5 2.5"/></symbol>
+        <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+        <symbol id="i-highlighter" viewBox="0 0 24 24"><path d="M14 4l6 6-9 9H8l-3-3v-3zM10 8l6 6M4 21h7"/></symbol>
+        <symbol id="i-library" viewBox="0 0 24 24"><path d="M5 4v16M10 4v16M15 4.5l5 15"/></symbol>
+        <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+        <symbol id="i-chevron-up" viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4V6a2 2 0 0 1 2-2h9v1"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 20h14"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+        <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol>
+        <symbol id="i-text" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5M9 13h6M9 17h6"/></symbol>
+        <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+        <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6L7 7M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></symbol>
+    </svg>
+
+    <div class="app" id="app" data-view="text">
+        <header class="topbar">
+            <div class="brand">
+                <img src="favicons/favicon.svg" alt="" width="28" height="28">
+                <h1>Rare Word Finder</h1>
+            </div>
+            <div class="toolbar-group">
+                <button type="button" id="paste-button" class="icon-button" aria-label="Paste from clipboard" data-tip="Paste from clipboard">
+                    <svg class="icon" aria-hidden="true"><use href="#i-paste"/></svg>
+                </button>
+                <button type="button" id="open-button" class="icon-button" aria-label="Open a text file" data-tip="Open a text file">
+                    <svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>
+                </button>
+                <button type="button" id="clear-button" class="icon-button" aria-label="Clear text" data-tip="Clear text">
+                    <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+                </button>
+            </div>
+            <div class="slider-group" data-tip="Rarest words to highlight">
+                <svg class="icon" aria-hidden="true"><use href="#i-highlighter"/></svg>
+                <input type="range" id="num-words-slider" min="1" max="50" value="10" aria-label="Number of rare words to highlight">
+                <output id="slider-value" for="num-words-slider">10</output>
+            </div>
+            <div class="topbar-actions">
+                <div class="menu-anchor">
+                    <button type="button" id="library-button" class="button" aria-label="Sample texts" aria-haspopup="listbox" aria-expanded="false" aria-controls="library-menu" data-tip="Sample texts">
+                        <svg class="icon" aria-hidden="true"><use href="#i-library"/></svg>
+                        <span id="library-label" class="truncate">Library</span>
+                        <svg class="icon icon-chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+                    </button>
+                    <div id="library-menu" class="menu" role="listbox" aria-label="Sample texts" hidden></div>
+                </div>
+                <button type="button" id="settings-button" class="icon-button" aria-label="Settings" data-tip="Settings">
+                    <svg class="icon" aria-hidden="true"><use href="#i-settings"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="text-pane" id="text-pane">
+            <div class="doc">
+                <div id="highlighted-text" aria-hidden="true"></div>
+                <textarea id="text-input" aria-label="Your text" placeholder="Paste or type your text here…" spellcheck="false" disabled></textarea>
+                <div id="empty-state" class="empty-state">
+                    <h2>Find the rarest words in any text</h2>
+                    <div class="empty-actions">
+                        <button type="button" id="empty-paste" class="button button-primary">
+                            <svg class="icon" aria-hidden="true"><use href="#i-paste"/></svg>Paste text
+                        </button>
+                        <button type="button" id="empty-open" class="button">
+                            <svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>Open file
+                        </button>
+                    </div>
+                    <p id="sample-chips" class="sample-chips"></p>
+                    <div id="csv-file-input" hidden>
+                        <label>Or load CSV manually (if opening as file): <input type="file" id="csv-file" accept=".csv"></label>
+                    </div>
+                </div>
+                <div class="drop-overlay" aria-hidden="true">
+                    <svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>
+                    <span>Drop a text file</span>
+                </div>
+            </div>
+            <input type="file" id="text-file" accept=".txt,text/plain" hidden>
+        </main>
+
+        <aside class="words-pane" id="words-pane" aria-label="Words">
+            <div class="words-head">
+                <div id="list-control" class="segmented segmented-fill" role="radiogroup" aria-label="Word list">
+                    <button type="button" role="radio" aria-checked="true" data-value="rarest">
+                        <span class="swatch"></span><span>Rarest</span><span id="rarest-count" class="count"></span>
+                    </button>
+                    <button type="button" role="radio" aria-checked="false" data-value="unknown" data-tip="Words not in the frequency database">
+                        <span class="swatch swatch-unknown"></span><span>Unknown</span><span id="unknown-count" class="count"></span>
+                    </button>
+                </div>
+                <div class="words-tools">
+                    <div class="search-field">
+                        <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+                        <input type="search" id="word-filter" placeholder="Filter words" aria-label="Filter words" data-tip="Filter words (/)">
+                    </div>
+                    <button type="button" id="copy-button" class="icon-button" aria-label="Copy list" data-tip="Copy list">
+                        <svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>
+                    </button>
+                    <button type="button" id="download-button" class="icon-button" aria-label="Download CSV" data-tip="Download CSV">
+                        <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="word-list-wrap">
+                <div id="word-columns" class="word-columns" hidden>
+                    <button type="button" class="column-head numeric" data-tip="Rank: 1 is the rarest word in your text" data-tip-tap aria-label="Rank: 1 is the rarest word in your text">
+                        <span>Rank</span><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+                    </button>
+                    <span class="column-head">Word</span>
+                    <button type="button" class="column-head numeric" data-tip="Frequency: appears about once in this many English words" data-tip-tap aria-label="Frequency: appears about once in this many English words">
+                        <span>Frequency</span><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+                    </button>
+                    <button type="button" class="column-head numeric" data-tip="Zipf: a log scale from about 1, very rare, to 7, very common" data-tip-tap aria-label="Zipf: a log scale from about 1, very rare, to 7, very common">
+                        <span>Zipf</span><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+                    </button>
+                </div>
+                <ul id="word-list" class="word-list" role="listbox" aria-label="Words, rarest first"></ul>
+                <p id="word-list-empty" class="word-list-empty"></p>
+            </div>
+            <section id="word-detail" class="detail" aria-labelledby="detail-word" hidden>
+                <div class="detail-head">
+                    <h2 id="detail-word"></h2>
+                    <button type="button" id="detail-copy" class="icon-button" aria-label="Copy word" data-tip="Copy word">
+                        <svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg>
+                    </button>
+                    <a id="detail-search" class="icon-button" target="_blank" rel="noopener" aria-label="Search online" data-tip="Search online">
+                        <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>
+                    </a>
+                    <button type="button" id="detail-close" class="icon-button" aria-label="Close" data-tip="Close (Esc)">
+                        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+                    </button>
+                </div>
+                <dl id="detail-stats" class="detail-stats"></dl>
+                <p id="detail-forms" class="detail-forms" hidden></p>
+                <div id="detail-body" class="detail-body" aria-live="polite"></div>
+                <div id="detail-occurrences" class="detail-occurrences">
+                    <span id="occurrence-count"></span>
+                    <button type="button" id="occurrence-prev" class="icon-button" aria-label="Previous in text" data-tip="Previous in text">
+                        <svg class="icon" aria-hidden="true"><use href="#i-chevron-up"/></svg>
+                    </button>
+                    <button type="button" id="occurrence-next" class="icon-button" aria-label="Next in text" data-tip="Next in text">
+                        <svg class="icon" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+                    </button>
+                </div>
+            </section>
+        </aside>
+
+        <nav id="view-control" class="bottom-nav" role="radiogroup" aria-label="View">
+            <button type="button" role="radio" aria-checked="true" data-value="text">
+                <svg class="icon" aria-hidden="true"><use href="#i-text"/></svg><span>Text</span>
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-value="words">
+                <svg class="icon" aria-hidden="true"><use href="#i-list"/></svg><span>Words</span>
+            </button>
+        </nav>
+
+        <footer class="statusbar">
+            <div id="load-status" class="loading" role="status">Loading word frequency data…</div>
+            <div id="text-stats" class="text-stats"></div>
+        </footer>
     </div>
 
-    <footer class="footer">
-        <p>
-            Made by <a href="https://github.com/ethanuser" target="_blank" rel="noopener">Ethan Nguyen</a> ·
-            <a href="https://github.com/ethanuser/rare-word-finder" target="_blank" rel="noopener" class="footer-github" aria-label="Source code on GitHub">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    <dialog id="settings-dialog" class="dialog" aria-labelledby="settings-title">
+        <div class="dialog-head">
+            <h2 id="settings-title">Settings</h2>
+            <button type="button" id="settings-close" class="icon-button" aria-label="Close">
+                <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+            </button>
+        </div>
+
+        <div class="setting-row">
+            <span class="setting-label"><svg class="icon" aria-hidden="true"><use href="#i-palette"/></svg>Theme</span>
+            <div id="theme-control" class="segmented" role="radiogroup" aria-label="Theme">
+                <button type="button" role="radio" aria-checked="true" data-value="system" aria-label="Match system" data-tip="Match system">
+                    <svg class="icon" aria-hidden="true"><use href="#i-monitor"/></svg>
+                </button>
+                <button type="button" role="radio" aria-checked="false" data-value="light" aria-label="Light" data-tip="Light">
+                    <svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg>
+                </button>
+                <button type="button" role="radio" aria-checked="false" data-value="dark" aria-label="Dark" data-tip="Dark">
+                    <svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="setting-row">
+            <span class="setting-label"><svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg>Word forms</span>
+            <div id="forms-control" class="segmented" role="radiogroup" aria-label="Word forms">
+                <button type="button" role="radio" aria-checked="true" data-value="on" data-tip="gloated and gloating count as gloat"><span>Group</span></button>
+                <button type="button" role="radio" aria-checked="false" data-value="off" data-tip="gloated and gloating count separately"><span>Separate</span></button>
+            </div>
+        </div>
+
+        <div class="setting-row">
+            <span class="setting-label"><svg class="icon" aria-hidden="true"><use href="#i-keyboard"/></svg>Shortcuts</span>
+            <span class="shortcuts">
+                <span data-tip="Details for the word at the cursor"><kbd id="modifier-key">Ctrl</kbd> <kbd>Enter</kbd></span>
+                <span data-tip="Filter words"><kbd>/</kbd></span>
+                <span data-tip="Close word details"><kbd>Esc</kbd></span>
+            </span>
+        </div>
+
+        <div class="setting-row">
+            <span class="setting-label"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Your text</span>
+            <span class="setting-value">Saved in this browser</span>
+        </div>
+
+        <button type="button" id="install-button" class="button dialog-action" hidden>
+            <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Install app
+        </button>
+
+        <div class="dialog-links">
+            <a class="icon-button" href="https://github.com/ethanuser" target="_blank" rel="noopener" aria-label="Made by Ethan Nguyen" data-tip="Made by Ethan Nguyen">
+                <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
             </a>
-        </p>
-        <p>
-            Word frequency data from <a href="https://www.kaggle.com/datasets/rtatman/english-word-frequency" target="_blank" rel="noopener">Kaggle</a> · Definitions via <a href="https://dictionaryapi.dev/" target="_blank" rel="noopener">Free Dictionary API</a>
-        </p>
-        <p>
-            Preset texts from <a href="https://www.gutenberg.org/" target="_blank" rel="noopener">Project Gutenberg</a>
-        </p>
-        <p>
-            Feedback welcome · <a href="https://forms.gle/WR459VE3x1SqQBDC8" target="_blank" rel="noopener">suggest improvements</a>
-        </p>
-        <p class="footer-donate">
-            If this tool helped you, you can <a href="https://buymeacoffee.com/ethannguyen" target="_blank" rel="noopener">buy me a coffee</a>.
-        </p>
-    </footer>
+            <a class="icon-button" href="https://github.com/ethanuser/rare-word-finder" target="_blank" rel="noopener" aria-label="Source code on GitHub" data-tip="Source code on GitHub">
+                <svg class="icon" aria-hidden="true"><use href="#i-code"/></svg>
+            </a>
+            <a class="icon-button" href="https://www.kaggle.com/datasets/rtatman/english-word-frequency" target="_blank" rel="noopener" aria-label="Word data from Kaggle" data-tip="Word data from Kaggle">
+                <svg class="icon" aria-hidden="true"><use href="#i-database"/></svg>
+            </a>
+            <a class="icon-button" href="https://dictionaryapi.dev/" target="_blank" rel="noopener" aria-label="Definitions from Free Dictionary API" data-tip="Definitions from Free Dictionary API">
+                <svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>
+            </a>
+            <a class="icon-button" href="https://www.gutenberg.org/" target="_blank" rel="noopener" aria-label="Texts from Project Gutenberg" data-tip="Texts from Project Gutenberg">
+                <svg class="icon" aria-hidden="true"><use href="#i-library"/></svg>
+            </a>
+            <a class="icon-button" href="https://www.researchgate.net/figure/The-Zipf-scale-of-word-frequency_tbl1_259718817#:~:text=The%20Zipf%20value%20is%20calculated,et%20al.%2C%202014)%20." target="_blank" rel="noopener" aria-label="About the Zipf scale" data-tip="About the Zipf scale">
+                <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            </a>
+            <a class="icon-button" href="https://forms.gle/WR459VE3x1SqQBDC8" target="_blank" rel="noopener" aria-label="Suggest improvements" data-tip="Suggest improvements">
+                <svg class="icon" aria-hidden="true"><use href="#i-message"/></svg>
+            </a>
+            <a class="icon-button" href="https://buymeacoffee.com/ethannguyen" target="_blank" rel="noopener" aria-label="Buy me a coffee" data-tip="Buy me a coffee">
+                <svg class="icon" aria-hidden="true"><use href="#i-coffee"/></svg>
+            </a>
+        </div>
+    </dialog>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div id="ui-tip" class="ui-tip" role="tooltip" hidden></div>
+    <div id="toast-stack" class="toast-stack" role="status"></div>
+
     <script src="packages/rare-word-analyzer/index.js"></script>
     <script src="app.js"></script>
 </body>

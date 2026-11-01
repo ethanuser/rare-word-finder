@@ -1,6 +1,9 @@
 {
   "name": "Rare Word Finder",
-  "short_name": "Rare Word Finder",
+  "short_name": "Rare Words",
+  "description": "Find the rarest words in any text.",
+  "start_url": "../",
+  "scope": "../",
   "icons": [
     {
       "src": "web-app-manifest-192x192.png",
